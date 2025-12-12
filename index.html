@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Devstral 2 是 Mistral AI 最新推出的开源代码大模型，专为真实软件工程打造，具备跨文件重构、Bug 修复、代码库理解、自动化工具调用等能力。为开发者、AI 工程师与团队提供更可靠的代码生成与工程自动化体验。"> 
+    <title>Devstral 2 - 会干活的 AI 工程师</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #E9D5FF;
+            --background-color: #000000;
+            --secondary-bg: #0a0a0a;
+            --accent-bg: #1a1a1a;
+            --border-color: #2a2a2a;
+            --text-primary: #E5E7EB;  /* 改为浅灰色，用于正文 */
+            --text-secondary: #9CA3AF;  /* 稍深一点的灰色 */
+            --gradient-bg: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+            --brand-color: #A855F7;
+            --title-color: #D8B4FE;  /* 浅紫色，用于标题 */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .hero {
+            padding: 80px 0;
+            background: var(--gradient-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(200, 203, 208, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(200, 203, 208, 0.1);
+            color: var(--text-primary);  /* 改为浅灰色 */
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(200, 203, 208, 0.2);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--brand-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 800px;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .cta-button {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-primary {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(200, 203, 208, 0.3);
+        }
+
+        .cta-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .cta-secondary:hover {
+            background-color: rgba(200, 203, 208, 0.1);
+        }
+
+        /* Features */
+        .features {
+            padding: 60px 0;
+            background-color: var(--secondary-bg);
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: var(--title-color);  /* 浅紫色 */
+            font-weight: 700;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background-color: var(--accent-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--text-primary);  /* 改为浅灰色 */
+        }
+
+        .feature-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Pain Points */
+        .pain-points {
+            padding: 60px 0;
+            background-color: var(--background-color);
+        }
+
+        .pain-point {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pain-point:last-child {
+            border-bottom: none;
+        }
+
+        .pain-point-icon {
+            font-size: 20px;
+            margin-right: 20px;
+            color: var(--text-secondary);
+        }
+
+        .pain-point-text {
+            flex: 1;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        /* Core Advantages */
+        .advantages {
+            padding: 60px 0;
+            background-color: var(--secondary-bg);
+        }
+
+        .advantage-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .advantage-item {
+            margin-bottom: 40px;
+        }
+
+        .advantage-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            border-radius: 50%;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .advantage-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--title-color);  /* 浅紫色 */
+            font-weight: 600;
+        }
+
+        .advantage-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .advantage-note {
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            padding: 60px 0;
+            background-color: var(--background-color);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 40px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--accent-bg);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(200, 203, 208, 0.1);
+            color: var(--title-color);  /* 浅紫色 */
+            font-weight: 600;
+        }
+
+        /* Quick Start */
+        .quick-start {
+            padding: 60px 0;
+            background-color: var(--secondary-bg);
+        }
+
+        .step {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--accent-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .step-title {
+            font-size: 20px;
+            color: var(--title-color);  /* 浅紫色 */
+            margin-bottom: 10px;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 60px 0;
+            background-color: var(--background-color);
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: var(--accent-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-question {
+            font-size: 18px;
+            color: var(--title-color);  /* 浅紫色 */
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 0;
+            background-color: var(--accent-bg);
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .resources {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .resource-link {
+            color: var(--text-primary);  /* 改为浅灰色 */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .resource-link:hover {
+            color: #DDD6FE;
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .cta-group {
+                flex-direction: column;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resources {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        /* Code Block */
+        .code-block {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            color: var(--text-primary);  /* 改为浅灰色 */
+        }
+
+        .code-comment {
+            color: #6272a4;
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <div class="tag">🚀 Mistral AI 发布</div>
+                <h1><span style="color: var(--brand-color);">Devstral 2</span> - 会干活的 AI 工程师</h1>
+                <p class="subtitle">
+                    帮你从「自己啃代码仓库」升级为「AI 代班修 Bug / 重构 / 写脚本」，把工程任务时间显著缩短。
+                </p>
+                <div class="features-hero">
+                    <div style="display: flex; gap: 40px; margin-top: 30px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">🔧</span>
+                            <span>面向真实工程：跨多文件修 Bug、重构、写脚本</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 24px;">💻</span>
+                            <span>开源权重可自建：云端 API + 本地部署都能用</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-group">
+                    <a href="#quick-start" class="cta-button cta-primary">立即免费体验 Devstral 2</a>
+                    <a href="#resources" class="cta-button cta-secondary">查看接入示例代码</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flux Image Generator Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">体验 Devstral 2 主题插画生成器</h2>
+            <p style="text-align: center; font-size: 18px; color: var(--text-secondary); max-width: 800px; margin: 0 auto 40px;">
+                在下面输入一句话，实时生成一张 Devstral 2 风格的主题或封面画
+            </p>
+            <div style="display: flex; justify-content: center; margin-bottom: 60px;">
+                <iframe
+                    src="https://black-forest-labs-flux-1-dev.hf.space"
+                    frameborder="0"
+                    width="850"
+                    height="450"
+                    style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);"
+                ></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pain Points Section -->
+    <section class="pain-points">
+        <div class="container">
+            <h2 class="section-title">你现在可能遇到这些工程痛点</h2>
+            <div class="pain-point-list">
+                <div class="pain-point">
+                    <span class="pain-point-icon">🐛</span>
+                    <span class="pain-point-text">修一个跨多文件的 Bug，要在前端/后端/数据库里来回翻半天</span>
+                </div>
+                <div class="pain-point">
+                    <span class="pain-point-icon">⚠️</span>
+                    <span class="pain-point-text">想做框架升级或大规模重构，总担心「动了这儿，哪里又炸了」</span>
+                </div>
+                <div class="pain-point">
+                    <span class="pain-point-icon">📜</span>
+                    <span class="pain-point-text">需要写运维/数据脚本，却总是在查命令文档、到处复制粘贴</span>
+                </div>
+                <div class="pain-point">
+                    <span class="pain-point-icon">🔍</span>
+                    <span class="pain-point-text">接手别人留下的项目，没人给你讲，只能一行行读代码、画调用图</span>
+                </div>
+                <div class="pain-point">
+                    <span class="pain-point-icon">📊</span>
+                    <span class="pain-point-text">团队 PR 量暴涨，代码审查、写文档、写测试把人拖垮</span>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--text-primary);">
+                Devstral 2 就是为这些「麻烦又耗时」的工程任务准备的 AI 工程师助手。
+            </p>
+        </div>
+    </section>
+
+    <!-- Why Choose Devstral 2 -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">为什么选择 Devstral 2？</h2>
+            <p style="text-align: center; font-size: 18px; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                Devstral 2 是 Mistral AI 发布的一款面向「代码/软件工程」的专用大模型（LLM），属于文本模型，特别擅长当 "代码代理（agentic coding）"：用工具去读代码仓库、修改多文件、解决真实开发任务。
+            </p>
+            <p style="text-align: center; margin-top: 20px; color: var(--text-primary); font-style: italic;">
+                "An enterprise grade text model, that excels at using tools to explore codebases, editing multiple files and power software engineering agents."
+            </p>
+            <p style="text-align: center; margin-top: 20px; color: var(--text-primary);">
+                通俗一点：Devstral 2 更像一名「会用工具的 AI 初/中级工程师」，而不是只会写几段代码片段的聊天机器人。
+            </p>
+        </div>
+    </section>
+
+    <!-- Three Types Model Comparison -->
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">三类模型对比图</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>特性维度</th>
+                            <th>通用大模型<br>(ChatGPT/Claude)</th>
+                            <th>传统补全型代码模型<br>(Copilot)</th>
+                            <th>Devstral 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>代码理解深度</strong></td>
+                            <td>表面语义理解，缺乏工程视角</td>
+                            <td>局部语法模式，仅看单文件</td>
+                            <td><strong style="color: var(--brand-color);">项目级架构理解</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>工具调用能力</strong></td>
+                            <td>需插件支持，原生能力弱</td>
+                            <td>仅限于代码补全</td>
+                            <td><strong style="color: var(--brand-color);">原生工具链集成</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>多文件协作</strong></td>
+                            <td>有限支持，易丢失上下文</td>
+                            <td>单文件处理</td>
+                            <td><strong style="color: var(--brand-color);">全仓库级协作</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>上下文长度</strong></td>
+                            <td>通常 &lt; 128K</td>
+                            <td>通常 &lt; 32K</td>
+                            <td><strong style="color: var(--brand-color);">256K 超长上下文</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>推理模式</strong></td>
+                            <td>对话式推理</td>
+                            <td>补全生成</td>
+                            <td><strong style="color: var(--brand-color);">工程化推理</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>验证反馈</strong></td>
+                            <td>人工验证</td>
+                            <td>无验证机制</td>
+                            <td><strong style="color: var(--brand-color);">自动测试验证</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>部署灵活性</strong></td>
+                            <td>仅云服务</td>
+                            <td>仅云服务</td>
+                            <td><strong style="color: var(--brand-color);">云服务 + 本地部署</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="text-align: center; margin-top: 30px; color: var(--text-primary); font-style: italic;">
+                一句话提炼：Devstral 2 = 通用模型的对话理解 + 传统代码模型的代码专精 + 工具调用能力 = 唯一能真正自主完成复杂编程任务的 AI。
+            </p>
+        </div>
+    </section>
+
+    <!-- Background Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Devstral 2 诞生的背景</h2>
+            <p style="text-align: center; font-size: 20px; color: var(--text-secondary); margin-bottom: 40px;">
+                <strong>Why now？</strong> 2024 年是代码 AI 从"玩具"走向"工具"的关键转折点。随着软件系统复杂度爆炸式增长，开发者面临的不再是简单的代码编写，而是跨文件、跨服务、跨环境的系统性工程挑战。
+            </p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <h3 class="feature-title">上下文断裂</h3>
+                    <p class="feature-description">
+                        传统代码模型只能看到当前文件或少数几行代码，无法理解整个项目的架构和业务逻辑。当需要修改涉及多个模块的功能时，模型缺乏全局视角，经常生成与现有代码库不兼容的建议。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3 class="feature-title">工具链割裂</h3>
+                    <p class="feature-description">
+                        开发者需要在 IDE、浏览器、终端、文档等多工具间频繁切换，每个切换都打断编程思路。代码生成后，还需要手动复制、粘贴、运行、调试，这个流程不仅低效，还容易引入人为错误。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3 class="feature-title">缺乏执行验证</h3>
+                    <p class="feature-description">
+                        传统模型只能"建议"代码，无法"验证"代码的正确性。生成的代码可能有语法错误、逻辑漏洞或与现有代码冲突，需要开发者亲自测试和调试，这实际上增加了额外的工作负担。
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--text-primary); font-style: italic;">
+                Devstral 2 的出现正是为了解决这三大痛点，通过 Agentic 设计和工具调用能力，实现了从"代码建议者"到"编程协作者"的根本性转变。
+            </p>
+            <p style="text-align: center; margin-top: 20px; color: var(--brand-color); font-weight: bold;">
+                一句话提炼：当软件复杂度超越人类认知极限时，我们需要的不只是代码生成器，而是一个能理解全局、操作工具、验证结果的 AI 编程伙伴。
+            </p>
+        </div>
+    </section>
+
+    <!-- Personality Cards -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">Devstral 2 的性格卡片</h2>
+            <div class="advantage-list">
+                <div class="advantage-item">
+                    <h3 class="advantage-title">🏗️ 资深架构师</h3>
+                    <p class="advantage-description">
+                        拥有 10+ 年大型项目经验，不仅会写代码，更懂得代码背后的架构设计和业务逻辑。面对需求时，首先思考的是可维护性、扩展性和团队协作，而不是简单的实现。
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">⚡ 实用主义者</h3>
+                    <p class="advantage-description">
+                        不追求炫技，而是选择最合适的方案。会说"这个功能用 Python 更合适"、"这个模块需要重构了"、"这里的测试覆盖率不够"，给出务实、可落地的建议。
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">🔍 细节控</h3>
+                    <p class="advantage-description">
+                        会注意到变量命名的一致性、代码缩进的规范性、错误处理的完整性。不仅仅是完成任务，还会考虑代码质量、性能优化和安全隐患。
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">🤝 协作伙伴</h3>
+                    <p class="advantage-description">
+                        理解团队开发中的约束，会询问"这个改动会影响其他模块吗"、"需要更新文档吗"、"要不要先写测试"。懂得在大型项目中保持代码库的一致性和稳定性。
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--brand-color); font-weight: bold;">
+                一句话提炼：Devstral 2 就像你团队里那个技术扎实、考虑周全、值得信赖的高级工程师，不仅完成任务，还会帮你把代码库变得更好。
+            </p>
+        </div>
+    </section>
+
+    <!-- Real Cases -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Devstral 2 实战案例集锦</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3 class="feature-title">遗留系统现代化改造</h3>
+                    <p class="feature-description">
+                        某大型电商平台的技术团队使用 Devstral 2 将拥有 10 年历史的单体 Java 应用进行微服务化改造。原本需要 3 个月的拆分工作，通过 Devstral 2 自动分析代码依赖、生成拆分方案并编写迁移脚本，最终在 3 周内完成了核心模块的微服务化。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">自动化测试覆盖率提升</h3>
+                    <p class="feature-description">
+                        一家金融科技公司利用 Devstral 2 为核心交易系统补充单元测试。模型通过分析业务逻辑、边界条件和异常场景，生成了覆盖率达到 85% 的测试用例。这些测试帮助团队发现了多个潜在的业务逻辑漏洞。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">API 文档自动化</h3>
+                    <p class="feature-description">
+                        开源项目维护者使用 Devstral 2 为其 REST API 自动生成接口文档。模型读取代码中的注释和类型定义，生成了标准的 OpenAPI 规范文档、使用示例和错误码说明。这不仅节省了大量文档编写时间，还保证了文档与代码的同步。
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--brand-color); font-weight: bold;">
+                关键启示：Devstral 2 最擅长处理需要深度理解代码库结构和业务逻辑的复杂任务，在这些场景下能带来显著的效率提升。
+            </p>
+        </div>
+    </section>
+
+    <!-- Core Advantages -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">核心优势</h2>
+            <div class="advantage-list">
+                <div class="advantage-item">
+                    <span class="advantage-number">1</span>
+                    <h3 class="advantage-title">专为 Coding Agent 设计</h3>
+                    <p class="advantage-description">
+                        <strong>原生工具调用能力</strong>：不只是写代码，而是会用工具探索代码库、编辑多文件
+                    </p>
+                    <p class="advantage-description">
+                        <strong>多文件协同编辑</strong>：支持跨文件重构、接口重命名、模块迁移等复杂操作
+                    </p>
+                    <p class="advantage-description">
+                        <strong>完整工程任务处理</strong>：从理解 issue 到生成 patch，再到验证测试，全流程自动化
+                    </p>
+                    <p class="advantage-note">
+                        对你的意义：你可以把它当成「会自己看仓库、会自己改代码」的 AI 搭档
+                    </p>
+                </div>
+
+                <div class="advantage-item">
+                    <span class="advantage-number">2</span>
+                    <h3 class="advantage-title">开源阵营性能标杆</h3>
+                    <p class="advantage-description">
+                        <strong>SWE-bench Verified 72.2%</strong>：在「真实 GitHub 仓库修 issue」的权威基准上表现亮眼
+                    </p>
+                    <p class="advantage-description">
+                        <strong>接近闭源头部水平</strong>：在开源/开放权重模型中属于最顶级一档
+                    </p>
+                    <p class="advantage-description">
+                        <strong>真实工程验证</strong>：重点在真实项目任务，而非只在玩具性 benchmark 刷分
+                    </p>
+                    <p class="advantage-note">
+                        对你的意义：你可以用它做严肃的工程活，而不是只拿来写 demo
+                    </p>
+                </div>
+
+                <div class="advantage-item">
+                    <span class="advantage-number">3</span>
+                    <h3 class="advantage-title">256K 超长上下文</h3>
+                    <p class="advantage-description">
+                        <strong>一次性理解大型仓库</strong>：可以把几十个文件、完整错误栈、配置文件全部放进上下文
+                    </p>
+                    <p class="advantage-description">
+                        <strong>跨文件重构无压力</strong>：全局搜索使用点，统一修改，不会遗漏
+                    </p>
+                    <p class="advantage-description">
+                        <strong>长对话记忆持久</strong>：在长时间的 Agent 会话中保持一致的理解和规划
+                    </p>
+                    <p class="advantage-note">
+                        对你的意义：你不用再「拆开发」问题，可以一次性把复杂背景丢给它解决
+                    </p>
+                </div>
+
+                <div class="advantage-item">
+                    <span class="advantage-number">4</span>
+                    <h3 class="advantage-title">极致成本效益</h3>
+                    <p class="advantage-description">
+                        <strong>API 价格优势</strong>：输入 $0.40/百万 tokens，输出 $2.00/百万 tokens
+                    </p>
+                    <p class="advantage-description">
+                        <strong>比部分闭源模型便宜很多</strong>：在真实任务中可显著拉低单位任务成本
+                    </p>
+                    <p class="advantage-description">
+                        <strong>开源权重，无厂商锁定</strong>：123B 用 Modified MIT，24B 用 Apache 2.0，可自建部署
+                    </p>
+                    <p class="advantage-note">
+                        对你的意义：既能用云端服务快速试，也能在自有算力上长期跑，避免被单一厂商锁死
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Practices -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Devstral 2 最佳使用建议</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👤</div>
+                    <h3 class="feature-title">个人开发者建议</h3>
+                    <p class="feature-description">
+                        <strong>从熟悉的场景开始</strong>：先在维护良好的个人项目上试用，积累使用经验
+                    </p>
+                    <p class="feature-description">
+                        <strong>渐进式集成</strong>：先用 Vibe CLI 做简单的代码搜索和文档生成，再逐步尝试复杂的重构任务
+                    </p>
+                    <p class="feature-description">
+                        <strong>保持代码审查习惯</strong>：将 Devstral 2 的输出视为草稿，始终进行人工审查和测试
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">团队协作建议</h3>
+                    <p class="feature-description">
+                        <strong>建立使用规范</strong>：制定团队统一的 Prompt 模板和代码风格指南
+                    </p>
+                    <p class="feature-description">
+                        <strong>版本控制集成</strong>：确保所有 AI 生成的代码都通过 Git 进行版本控制
+                    </p>
+                    <p class="feature-description">
+                        <strong>CI/CD 融合</strong>：在持续集成流程中加入 AI 生成代码的质量检查步骤
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏢</div>
+                    <h3 class="feature-title">企业部署建议</h3>
+                    <p class="feature-description">
+                        <strong>安全第一</strong>：在生产环境中使用时，务必启用权限控制和操作审计
+                    </p>
+                    <p class="feature-description">
+                        <strong>成本优化</strong>：根据使用频率选择合适的部署方案（API vs 本地部署）
+                    </p>
+                    <p class="feature-description">
+                        <strong>渐进式推广</strong>：先在非关键项目试点，验证效果后再全面推广
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--brand-color); font-weight: bold;">
+                核心理念：Devstral 2 是强大的编程助手，但人类的判断和监督依然不可或缺。合理的使用策略能够最大化其价值，同时控制潜在风险。
+            </p>
+        </div>
+    </section>
+
+    <!-- Vision Feature -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">Devstral Small 2：看图也能写代码</h2>
+            <div class="advantage-list">
+                <div class="advantage-item">
+                    <h3 class="advantage-title">🖼️ UI 截图 → 代码</h3>
+                    <p class="advantage-description">
+                        根据网页或应用界面截图，自动生成对应的前端代码（HTML/CSS/React）。设计师给的原型图，可以直接转换成可运行的代码。
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">🏗️ 架构图 → 脚本</h3>
+                    <p class="advantage-description">
+                        根据系统架构图或流程图，生成对应的部署脚本、配置文件、Docker Compose 等。让架构设计快速落地为可执行的配置。
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">🐛 报错截图分析</h3>
+                    <p class="advantage-description">
+                        将 IDE 或终端的错误截图输入，Devstral Small 2 能够"看懂"错误位置和上下文，快速定位问题并提出修复步骤。
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 30px; color: var(--text-secondary); font-style: italic;">
+                注意：这是面向"看图写代码"的实用 Vision 能力，不是通用图像识别模型，专注于编程相关的视觉理解。
+            </p>
+        </div>
+    </section>
+
+    <!-- Model Limitations -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">模型边界与已知局限</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚠️</div>
+                    <h3 class="feature-title">不适合简单任务</h3>
+                    <p class="feature-description">
+                        在非常简单的小脚本或日常闲聊任务上，Devstral 2 不一定比通用大模型更有优势。它的专长在于复杂的工程任务。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="feature-title">工具调用需要正确配置</h3>
+                    <p class="feature-description">
+                        工具调用对集成方式、聊天模板比较敏感，配置不当会出现"有时调用工具、有时只聊天"的情况。建议使用官方推荐的配置。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">语言支持有侧重</h3>
+                    <p class="feature-description">
+                        虽然支持 80+ 编程语言，但在主流语言（Python/JS/TS/Rust/Go）上表现最佳，对冷门语言使用前建议先做小规模验证。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3 class="feature-title">上下文质量很重要</h3>
+                    <p class="feature-description">
+                        虽然有 256K 上下文，但上下文太乱或无关信息太多时，效果会下降。建议提供清晰、相关的上下文。
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--brand-color); font-weight: bold;">
+                规避建议：从明确的需求开始，提供必要的上下文，使用官方推荐的工具配置，对复杂任务进行分步骤处理。
+            </p>
+        </div>
+    </section>
+
+    <!-- Prompt Best Practices -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">如何跟 Devstral 2 说话更有效</h2>
+            <div class="advantage-list">
+                <div class="advantage-item">
+                    <h3 class="advantage-title">基础设置</h3>
+                    <p class="advantage-description">
+                        <strong>保留官方 System Prompt</strong><br>
+                        使用 Devstral 2 时，务必加载官方推荐的系统提示词，这可以显著提升工具调用和多步推理的一致性。
+                    </p>
+                    <p class="advantage-description">
+                        <strong>使用较低温度</strong><br>
+                        建议将 temperature 设置在 0-0.15 之间，减少随机性，让输出更稳定。
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">四步提示法</h3>
+                    <p class="advantage-description">
+                        <strong>1. 明确目标</strong> - 我要达成什么（如"修复某个 bug 并更新测试"）
+                    </p>
+                    <p class="advantage-description">
+                        <strong>2. 提供上下文</strong> - 关键文件路径、框架名称、运行环境
+                    </p>
+                    <p class="advantage-description">
+                        <strong>3. 写清约束</strong> - 禁止做什么（如"不要重写整个项目，只改最小 diff"）
+                    </p>
+                    <p class="advantage-description">
+                        <strong>4. 明确工具期望</strong> - 要求它"通过工具查看/修改文件，而不是直接臆测"
+                    </p>
+                </div>
+                <div class="advantage-item">
+                    <h3 class="advantage-title">复杂任务技巧</h3>
+                    <p class="advantage-description">
+                        对于复杂重构任务，建议采用"先读、后想、再改"的模式：
+                    </p>
+                    <p class="advantage-description">
+                        1. 先让模型通读项目结构并总结关键模块
+                    </p>
+                    <p class="advantage-description">
+                        2. 再给出分步重构方案
+                    </p>
+                    <p class="advantage-description">
+                        3. 最后才应用到文件上
+                    </p>
+                    <p class="advantage-note">
+                        这种结构化的提示方式能让 Devstral 2 更好地理解任务，生成更准确的代码。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Specs -->
+    <section class="comparison">
+        <div class="container">
+            <h2 class="section-title">技术规格对比</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>特性维度</th>
+                            <th>Devstral 2</th>
+                            <th>Devstral Small 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>参数量</strong></td>
+                            <td>123B dense Transformer</td>
+                            <td>24B dense Transformer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>架构</strong></td>
+                            <td>与 Ministral 3 同代架构<br>（dense + GQA + RoPE）</td>
+                            <td>同架构，特别支持 Vision</td>
+                        </tr>
+                        <tr>
+                            <td><strong>上下文长度</strong></td>
+                            <td>256K tokens</td>
+                            <td>256K tokens</td>
+                        </tr>
+                        <tr>
+                            <td><strong>主要定位</strong></td>
+                            <td>数据中心/高端服务器<br>极致性能</td>
+                            <td>本地或小集群<br>单卡即可运行</td>
+                        </tr>
+                        <tr>
+                            <td><strong>性能（SWE-bench）</strong></td>
+                            <td>72.2%，接近最强闭源模型</td>
+                            <td>68.0%，24B 级别天花板</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vision 能力</strong></td>
+                            <td>支持</td>
+                            <td>支持，能理解图片/截图</td>
+                        </tr>
+                        <tr>
+                            <td><strong>许可协议</strong></td>
+                            <td>Modified MIT<br>（带收入上限条款）</td>
+                            <td>Apache 2.0<br>标准宽松商业许可</td>
+                        </tr>
+                        <tr>
+                            <td><strong>硬件需求</strong></td>
+                            <td>全精度推理需要 ~128GB<br>RAM/VRAM</td>
+                            <td>全精度约 25GB<br>RAM/VRAM</td>
+                        </tr>
+                        <tr>
+                            <td><strong>典型使用</strong></td>
+                            <td>云端/集群部署，跑重任务</td>
+                            <td>本地/轻量部署，做日常开发辅助</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top: 60px; margin-bottom: 30px; color: var(--title-color);">技术原理概览</h3>
+            <div style="background-color: var(--accent-bg); padding: 30px; border-radius: 12px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--brand-color); margin-bottom: 20px;">架构设计</h4>
+                <p style="margin-bottom: 20px; color: var(--text-primary);">
+                    Devstral 2 基于与 Ministral 3 同一代的长上下文 Transformer 架构，采用 dense 模式（所有参数参与计算），配备了 Grouped Query Attention (GQA) 和 RoPE 缩放技术。这种设计让它在保持强大性能的同时，能够高效处理 256K 的超长上下文。
+                </p>
+
+                <h4 style="color: var(--brand-color); margin-bottom: 20px;">训练优化</h4>
+                <p style="margin-bottom: 20px; color: var(--text-primary);">
+                    Devstral 2 围绕真实 GitHub issue（如 SWE-bench Verified）和工具调用轨迹进行了专项优化。它学会了完整的"读 issue → 查代码 → 调工具 → 改多文件 → 跑测试"的闭环流程。这种训练方式让模型不只是生成代码，而是真正理解如何完成工程任务。
+                </p>
+
+                <h4 style="color: var(--brand-color); margin-bottom: 10px;">小白版理解</h4>
+                <p style="color: var(--text-primary);">
+                    Devstral 2 就像一个"超大号 Ministral 3"，专门为编程任务做了深度定制。它能同时看很多文件、理解项目结构，还会用各种开发工具，就像一个经验丰富的工程师。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5 Major Engineering Scenarios -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">Devstral 2 最擅长做什么？5 大真实工程场景</h2>
+            <p style="text-align: center; font-size: 18px; color: var(--text-secondary); max-width: 800px; margin: 0 auto; margin-bottom: 40px;">
+                Devstral 2 和 Devstral Small 2 都是为「真实工程任务」设计的代码模型，而不是只写几个 demo 脚本。综合官方说明和实践案例，可以归纳出 5 个主打场景：
+            </p>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">1. 修真实 GitHub Issue / Bug Fixing（SWE 级难度）</h3>
+                <p class="advantage-description">
+                    Devstral 系列是专门围绕「解决真实 GitHub issue」训练的模型。在 SWE-bench Verified（真实 issue + 多文件修改 + 测试验证）上，Devstral 2 的解决率约 72.2%，Devstral Small 2 约 68%。
+                </p>
+                <p class="advantage-description">
+                    <strong>适用场景：</strong> CI 里自动尝试修复回归 bug、帮助开发者快速定位问题、生成 patch、跑测试、给 issue 加上自动分析和修复建议
+                </p>
+                <p class="advantage-description">
+                    <strong>实际效果：</strong> 当遇到涉及多文件、复杂调用链的 bug 时，Devstral 2 可以：定位问题（分析错误日志，追踪调用链，找到根本原因）、多文件修改（同步修改前端、后端、数据库等相关代码）、自动验证（配合测试框架，确认修复是否生效）
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">2. 跨多文件重构 / 代码库改造</h3>
+                <p class="advantage-description">
+                    适合那种"动一个地方、牵一大堆文件"的重构。Devstral 在官方介绍里，被点名用来做 cross-file refactors、codebase exploration。它能理解大仓库的结构，跨文件地追踪依赖和调用关系。
+                </p>
+                <p class="advantage-description">
+                    <strong>典型用法：</strong> 大规模重命名 / API 改动、拆分/合并模块、服务、清理历史遗留代码、统一风格
+                </p>
+                <p class="advantage-description">
+                    <strong>实际效果：</strong> 模块重命名 / 接口升级（全局搜索引用点，统一更新）、框架迁移（从旧版本升级到新版本，同步更新调用处和配置）、架构调整（把单体代码拆分为多个模块，或反之整合）
+                </p>
+                <p class="advantage-note">
+                    凡是「人一想到就觉得麻烦」的大范围代码改动，都是 Devstral 2 的优势场景。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">3. 自动写测试 / 自动化 PR（Test Generation & PR Authoring）</h3>
+                <p class="advantage-description">
+                    官方给出的组合玩法是：Devstral + 工程 Agent（例如 OpenHands、Vibe CLI），完成：为新功能或 bugfix 自动补齐单元测试、集成测试、自动生成 Pull Request，包括 diff、说明文本、风险提示
+                </p>
+                <p class="advantage-description">
+                    <strong>适合用在：</strong> CI 流水线中自动补测试、帮助团队维持较高测试覆盖率，而不明显增加人工成本
+                </p>
+                <p class="advantage-description">
+                    <strong>实际效果：</strong> 作为团队效率放大器：PR 自动审查（检查逻辑风险、安全隐患、性能问题）、生成变更说明（自动写 Release Note、更新日志）、接口文档（根据代码生成 API 文档和使用说明）
+                </p>
+                <p class="advantage-note">
+                    当你被 PR / 代码变更多到烦躁时，用 Devstral 2 做「第一轮审查」。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">4. 终端里的代码智能体 / CLI 自动化任务</h3>
+                <p class="advantage-description">
+                    "在终端里操作整个仓库的 AI 工程师"。Devstral 2 是 Mistral Vibe CLI 的默认后端模型。在命令行环境下，它可以：执行命令（如运行测试、启动服务）、读写项目文件、查看日志、定位异常、按照自然语言指令完成一系列操作
+                </p>
+                <p class="advantage-description">
+                    <strong>对个人和团队来说，它可以变成：</strong> 会读代码、会跑命令的"终端助手"、用口语化指令驱动复杂的工程任务
+                </p>
+                <p class="advantage-description">
+                    <strong>实际效果：</strong> 把重复性工作交给 AI：运维脚本（部署、监控、备份等自动化任务）、数据脚本（数据清洗、迁移、批量处理）、一次性脚本（临时需求、验证想法时快速生成可执行代码）
+                </p>
+                <p class="advantage-note">
+                    当你只知道「要达成什么效果」，但懒得查命令语法时，让 Devstral 2 来写脚本。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">5. 本地部署的私有代码助手 / On-Prem 代码智能体</h3>
+                <p class="advantage-description">
+                    适合对隐私和合规要求很高的场景。Devstral Small 2（24B）专门为本地和私有云场景设计：单张 RTX 4090、32GB Mac，甚至高配 CPU 服务器即可运行、采用 Apache 2.0 许可，可自由商用部署
+                </p>
+                <p class="advantage-description">
+                    <strong>典型用法：</strong> 在公司内网搭建只看私有仓库的代码助手、在笔记本或工作站上运行"离线 AI 结对编程"、用作各类工程 Agent 的本地大脑
+                </p>
+                <p class="advantage-description">
+                    <strong>实际效果：</strong> 接手遗留项目或新代码库时：项目结构分析（快速了解项目的技术栈和模块划分）、关键模块定位（找到登录、下单、权限等核心功能的实现位置）、生成新手指南（为团队新成员创建入门文档）
+                </p>
+                <p class="advantage-note">
+                    「我有一堆别人写的代码，却没人给我讲」的场景，用 Devstral 2 当你的「项目导游」。
+                </p>
+            </div>
+
+            <!-- Two Main Battlefields -->
+            <h3 style="margin-top: 60px; margin-bottom: 30px; color: var(--title-color); text-align: center;">Devstral 2 的两大"主战场"</h3>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">1. 真实项目里的 Bug 修复 / Issue 关闭</h3>
+                <p class="advantage-description">
+                    SWE-bench Verified 这类评测本身就是："真实 GitHub issue + 多文件修改 + 测试验证"。Devstral 2 在这类任务上的表现被官方和媒体反复引用，是它的招牌能力。
+                </p>
+                <p class="advantage-description">
+                    <strong>对团队的意义：</strong> 能在 CI 或专用流水线上，自动尝试修复一部分 issue、就算没有一次修好，也能给人类工程师提供清晰的排查思路和 patch 草稿
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">2. 多文件重构 + 测试 + PR 的完整闭环</h3>
+                <p class="advantage-description">
+                    官方场景中经常一起出现的三个关键词是：cross-file refactors、test generation、PR authoring。换成落地语言，就是：在大仓库里做结构性的重构、为改动自动补测试、把结果打包成可审核的 PR
+                </p>
+                <p class="advantage-note">
+                    对比只写一个脚本、一个函数，这类"项目级大手术"更能放大发挥 Devstral 2 的价值。
+                </p>
+            </div>
+
+            <!-- Vision Scenarios -->
+            <h3 style="margin-top: 60px; margin-bottom: 30px; color: var(--title-color); text-align: center;">Devstral Small 2 的 Vision 场景</h3>
+            <div class="advantage-item">
+                <h3 class="advantage-title">根据界面截图生成前端代码</h3>
+                <p class="advantage-description">
+                    将设计稿或参考界面的截图发给 Devstral Small 2，它能够理解界面布局并生成对应的前端代码，包括 HTML 结构、CSS 样式和 React 组件。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">根据架构图生成部署配置</h3>
+                <p class="advantage-description">
+                    提供系统架构图，Devstral Small 2 可以生成对应的 Docker Compose 文件、Kubernetes 配置或 CI/CD 脚本，让设计快速落地。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">错误截图智能诊断</h3>
+                <p class="advantage-description">
+                    IDE 编译错误或运行时报错的截图，Devstral Small 2 能够识别错误类型、定位问题代码，并提供具体的修复步骤。
+                </p>
+                <p class="advantage-note">
+                    注意：这是面向"看图写代码"的实用 Vision 能力，不是通用图像识别模型，专注于编程相关的视觉理解。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Feedback -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">用户评价与社区反馈</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">X / Twitter 开发者声音</h3>
+                    <p class="feature-description">
+                        "Mistral 的新一代开源 coding 模型家族，在真实工程任务上已经能和闭源头部掰手腕了。"
+                    </p>
+                    <p class="feature-description">
+                        "小号只有 24B 参数，却在笔记本上本地跑，对个人开发者来说 100% 私有的本地 AI 编程成本可接受。"
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">Reddit /r/LocalLLaMA 社区</h3>
+                    <p class="feature-description">
+                        "so far very impressed... very snappy on 2x3090s，24B 小模型里表现非常强。"
+                    </p>
+                    <p class="feature-description">
+                        "工具调用很顺滑，改动通常是局部、最小化的，而不是像有些模型那样到处乱改。"
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📰</div>
+                    <h3 class="feature-title">技术媒体总结</h3>
+                    <p class="feature-description">
+                        "在 SWE-bench Verified 上达到 72.2%，已进入开源/开放权重模型的第一梯队，性能接近部分闭源头部模型。"
+                    </p>
+                    <p class="feature-description">
+                        "Devstral 2 系列被形容为'SOTA open model for code agents'，开源权重 + 宽松许可获得开发者好感。"
+                    </p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 40px; color: var(--text-primary);">
+                社区整体共识："很强，很爽，但别忘了它还是 LLM，要上生产说明要有保护栏。"
+            </p>
+        </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section class="quick-start" id="quick-start">
+        <div class="container">
+            <h2 class="section-title">快速上手指南</h2>
+            <div class="step">
+                <h3 class="step-title">第一步：获取 Devstral 2</h3>
+                <p><strong>路线 A：最简单 —— 官方 Playground 体验</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">打开 Devstral 2 模型文档，点击右上角「Try in playground」，注册登录后即可在线对话测试</p>
+
+                <p><strong>路线 B：使用官方 API（推荐给开发者）</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">访问 Mistral Console 注册账号，创建 API Key，使用模型名：devstral-2512+2</p>
+
+                <p><strong>路线 C：下载开源权重（适合有算力的团队）</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">访问 HuggingFace 下载官方权重或量化版本，使用 vLLM、TGI、llama.cpp 等框架部署</p>
+            </div>
+
+            <div class="step">
+                <h3 class="step-title">第二步：运行一个最小 Demo</h3>
+                <div class="code-block">
+<pre><code><span class="code-comment"># Python 示例</span>
+import os
+from mistralai import Mistral
+
+# 设置 API Key（请先在系统环境变量中配置 MISTRAL_API_KEY）
+api_key = os.environ["MISTRAL_API_KEY"]
+model = "devstral-2512+2"  # Devstral 2 模型名
+client = Mistral(api_key=api_key)
+
+# 发送请求
+chat_response = client.chat.complete(
+    model=model,
+    messages=[{
+        "role": "user",
+        "content": "用 Python 写一个函数，输入整数 n，返回 1 到 n 的和，并加上中文注释。"
+    }],
+)
+
+print(chat_response.choices[0].message["content"])
+</code></pre>
+                </div>
+                <p style="margin-top: 15px; color: var(--text-secondary);">
+                    其他语言示例（JavaScript / Node.js、curl、Go 等）可在官方文档查看。Devstral 2 的 API 兼容 OpenAI 格式，易于集成。
+                </p>
+            </div>
+
+            <div class="step">
+                <h3 class="step-title">第三步：接入实际项目</h3>
+                <p><strong>方式 A：云 API 调用</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">通过 HTTP 或官方 SDK，直接调用 /v1/chat/completions，适合 SaaS、云服务、在线工具等场景</p>
+
+                <p><strong>方式 B：Vibe CLI 终端集成</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">在项目目录安装并运行 mistral-vibe，用自然语言控制，对现有项目执行「搜索、重构、生成文档」等操作</p>
+
+                <p><strong>方式 C：本地推理服务</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">用 vLLM / TGI 等框架启动本地推理服务，在内网暴露兼容 OpenAI/Mistral 风格的 API 接口</p>
+            </div>
+
+            <div class="step">
+                <h3 class="step-title">第四步：最佳实践建议</h3>
+                <p><strong>永远在 Git 仓库中使用</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">保证任何自动修改都有 git diff 可以回滚，这是最基本的安全保障</p>
+
+                <p><strong>先让 Devstral 2 解释再修改</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">使用提示词前缀："先用中文解释你打算做什么，再给出代码"，避免直接大幅改动</p>
+
+                <p><strong>配合测试和 CI 验证</strong></p>
+                <p style="margin-left: 20px; color: var(--text-secondary);">让生成的代码必须通过单元测试、类型检查、代码质量检查后再合并到主分支</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best Practices for Different Users -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">针对不同用户的最佳实践</h2>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">对个人开发者：把 AI 当"本地结对程序员"</h3>
+                <p class="advantage-description">
+                    Devstral Small 2 适合跑在个人设备上（如 4090、32GB Mac 或高配 CPU），很多开发者把它形容为"随身带着一个离线的 AI 结对搭档"。对个人和 indie hacker 来说，它主要帮你省掉这些精力：
+                </p>
+                <p class="advantage-description">
+                    <strong>1. 读陌生/老项目的时间</strong> - 接手别人开源的小项目、自己几年前的 side-project，经常要先"啃代码"很久。有了 Devstral + CLI 工具，可以直接让模型：先通读项目结构、输出架构概览、关键模块说明和潜在风险点
+                </p>
+                <p class="advantage-description">
+                    <strong>2. 反复调 bug + 查错信息的时间</strong> - 模型可以：阅读报错信息、日志、自动定位到相关文件和代码块、给出 patch，并帮你跑测试验证
+                </p>
+                <p class="advantage-description">
+                    <strong>3. 写测试和整理 PR 的劲头</strong> - 对个人项目来说，最容易被忽视的往往是：单元测试 / 集成测试、清晰、规范的 PR 描述。Devstral 可以承担这部分"工程卫生工作"，让你更专注在功能设计和体验上。
+                </p>
+                <p class="advantage-description">
+                    <strong>4. 本地隐私项目的心理负担</strong> - Small 2 可以完全在本地或自建服务器上跑，不需要把代码传到公有云。对那些比较敏感、暂时不想放到 GitHub 的项目，会更安心。
+                </p>
+                <p class="advantage-note">
+                    对个人和 indie hacker 来说，Devstral Small 2 更像一个跑在自己机器上的 AI 搭档：帮你读项目、排 bug、补测试、整理 PR，让你把时间用在想点子和做关键决策上。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">对小团队/初创公司：两条现实路线</h3>
+                <p class="advantage-description">
+                    结合成本和部署方式，对小团队、初创公司比较务实的两条路线是：
+                </p>
+                <p class="advantage-description">
+                    <strong>路线 A：Devstral 2 挂在 CI/PR 上，做"云端工程大脑"</strong> - 把 Devstral 2 接到现有的 GitHub/GitLab + CI 流水线上，让它：自动 review 代码改动、自动补测试用例、对部分 issue 尝试自动修复并提交 PR
+                </p>
+                <p class="advantage-description">
+                    <strong>优点：</strong> 不需要推翻现有流程，只是多加一层自动化、适合需要频繁迭代、追求效率的小团队
+                </p>
+                <p class="advantage-description">
+                    <strong>路线 B：Devstral Small 2 搭私有"团队代码智能体"</strong> - 在团队自己的服务器或私有云上部署 Small 2：通过 OpenHands、Vibe CLI 或自研工具接入、只访问团队的私有仓库，不连外网
+                </p>
+                <p class="advantage-description">
+                    <strong>用法类似于：</strong> 一个只懂你们公司代码的"内网工程师"、兼顾隐私、安全和响应速度
+                </p>
+                <p class="advantage-note">
+                    小团队可以用 Devstral 2 + CI，把 60–70% 的重复 review 和测试工作交给 AI；也可以用 Small 2 搭一个只看自家仓库的内网工程师。
+                </p>
+            </div>
+
+            <div class="advantage-item">
+                <h3 class="advantage-title">对中大型企业：推荐的混合部署架构</h3>
+                <p class="advantage-description">
+                    对中大型企业来说，授权和合规是绕不过去的话题：Devstral 2（123B）：修改版 MIT 许可，对超过一定收入/规模的公司有额外限制，更适合通过商业协议来使用、Devstral Small 2（24B）：Apache 2.0 许可，可自由商用和本地部署，专门面向隐私敏感场景
+                </p>
+                <p class="advantage-description">
+                    综合多方建议，一个比较现实的企业架构是「本地 + 云端」混合：
+                </p>
+                <p class="advantage-description">
+                    <strong>本地/内网：Small 2 做"私有代码智能体"</strong> - 部署在企业自有机房、私有云或 VPC 中、只访问内网 Git 仓库、内部 CI 系统和监控平台、主要负责：核心系统、敏感业务的日常工程支持、对合规要求极高的改动提供辅助
+                </p>
+                <p class="advantage-description">
+                    <strong>云端：Devstral 2 负责"高难度任务/重型变更"</strong> - 通过 Mistral 云 API 或托管服务接入、专门用于：极其复杂的重构任务、跨多个代码仓库、多个服务的大规模工程调整
+                </p>
+                <p class="advantage-description">
+                    <strong>编排层：统一的 Agent/工具平台</strong> - 在上层用 OpenHands 或企业自建的 Agent 平台：根据任务类型自动选择调用 Small 2 还是 Devstral 2、统一做权限控制、审计、回溯
+                </p>
+                <p class="advantage-note">
+                    核心代码放在本地交给 Small 2，最复杂的大手术交给云端的 Devstral 2，中间由一层 Agent 平台统一编排，这是一种更符合大企业合规与效率平衡的典型架构。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="section-title">常见问题解答</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">Q1：Devstral 2 和 Devstral Small 2 有什么区别？</div>
+                    <div class="faq-answer">
+                        Devstral 2 是 123B 参数的大号模型，适合云端/集群部署，追求极致效果与能力；
+                        Devstral Small 2 是 24B 小号模型，可在 RTX 4090 或 32GB Mac 上本地运行，适合日常开发辅助与私有部署。
+                        详细规格见上文「技术规格对比」。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q2：能不能商用？需要注意什么许可证？</div>
+                    <div class="faq-answer">
+                        Devstral 2 使用 Modified MIT License，Devstral Small 2 使用 Apache 2.0。
+                        中小企业和个人开发者一般可以在遵守条款的前提下商用；
+                        大型企业（如月收入超过一定门槛）需要仔细审核许可证细则，并在必要时咨询法务。
+                        具体以 Mistral 官方许可证说明为准。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q3：自动改代码安全吗？会不会把项目改坏？</div>
+                    <div class="faq-answer">
+                        Devstral 2 的定位更像一名「能干的初级工程师」：
+                        它可以帮你提出修改方案、生成 patch、跑测试
+                        但仍然强烈建议保留人工 Review 和测试流程
+                        推荐做法：
+                        在非生产分支上使用
+                        把它的改动视为「候选方案」，合并前由工程师审核
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q4：我需要什么程度的编程能力，才能用好 Devstral 2？</div>
+                    <div class="faq-answer">
+                        如果只是用 Playground 体验：会基本的英文/中文描述即可
+                        如果想把它接到自己的项目里：
+                        需要能看懂自己项目的代码
+                        了解基本的 Git 流程、测试流程
+                        能看懂 API 调用示例
+                        完全不会编程的小白，可以先学一点基础，再把 Devstral 2 当作「学习加速器」。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q5：支持本地部署吗？需要什么硬件？</div>
+                    <div class="faq-answer">
+                        支持。你可以下载开源权重，自行部署：
+                        Devstral 2：推荐至少 4×H100 等级的 GPU 集群
+                        Devstral Small 2：可在 RTX 4090 或 32GB Mac 上运行
+                        是否适合本地部署，取决于你现有的算力与成本预算。
+                        更详细的硬件需求与部署示例，可参考官方文档与社区实践。
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q6：有没有配套的视频 / Demo 可以看？</div>
+                    <div class="faq-answer">
+                        有不少开发者已经在 YouTube 等平台发布了演示视频，如：
+                        <br>
+                        Mistral Vibe CLI Demo: <a href="https://www.youtube.com/watch?v=z-xR_oIuf7Q" style="color: var(--title-color);" target="_blank">https://www.youtube.com/watch?v=z-xR_oIuf7Q</a>
+                        <br>
+                        Devstral 2 First Look & Testing: <a href="https://www.youtube.com/watch?v=IeDQl4c5Gq8" style="color: var(--title-color);" target="_blank">https://www.youtube.com/watch?v=IeDQl4c5Gq8</a>
+                        <br>
+                        Devstral 2 Small is Here: <a href="https://www.youtube.com/watch?v=2LOvuKUDkMo" style="color: var(--title-color);" target="_blank">https://www.youtube.com/watch?v=2LOvuKUDkMo</a>
+                        <br>
+                        OpenHands + Devstral = Fully Local Coding Agent: <a href="https://www.youtube.com/watch?v=oV9tAkS2Xic" style="color: var(--title-color);" target="_blank">https://www.youtube.com/watch?v=oV9tAkS2Xic</a>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Q7：不会写代码的小白，能用 Devstral 吗？</div>
+                    <div class="faq-answer">
+                        <strong>自然语言友好度</strong>
+                        官方把 Devstral 2 定位为"enterprise-grade text model for SWE use cases"，说明你可以用普通的文字来下指令，而不是必须写复杂 Prompt。许多 CLI 工具示例都是这样的用法：
+                        - "帮我查一下 concurrent.py 里面可能的竞态条件"
+
+                        <strong>现实情况</strong>
+                        Devstral 的典型工作内容包括：
+                        - 看 diff，判断改动是否合理
+                        - 看报错堆栈、日志
+                        - 修改源代码并给出解释
+
+                        如果你完全看不懂代码，很难对这些改动做判断，也就很难真正掌控结果。
+
+                        <strong>更合适的定位</strong>
+                        Devstral 2 更适合作为「工程团队内部用的底层模型」：
+                        - 由公司在上面封装更友好的界面和流程
+                        - 面向开发者、测试、DevOps 等技术角色
+
+                        <strong>对完全不会代码的用户：</strong>
+                        更合适的选择仍然是通用大模型 + 无代码工具，让 Devstral 在后台为这些工具提供"看代码、改代码"的能力，而不是直接让小白和它对话。
+
+                        <br><br>
+                        <strong>Devstral 更像是给工程团队用的底层 AI 工程师，而不是给零基础用户的一键写代码神器。如果你是产品、技术运营或懂一点点代码，它可以帮你读懂模块、解释风险；如果完全不写代码，更建议用通用大模型 + 无代码工具，由你的团队在后台使用 Devstral。</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing and Recommendations -->
+    <section class="advantages">
+        <div class="container">
+            <h2 class="section-title">价格与使用建议</h2>
+            <p style="text-align: center; font-size: 18px; color: var(--text-secondary); max-width: 800px; margin: 0 auto;">
+                根据 Mistral 官方信息，目前（2025年12月）通过官方 API 使用 Devstral 2 处于免费期，以下是正式定价
+            </p>
+            <div class="advantage-list">
+                <div class="advantage-item">
+                    <h3 class="advantage-title">个人 / 独立开发者</h3>
+                    <p class="advantage-description">
+                        推荐方案：本地部署 Devstral Small 2（24B），使用 RTX 4090 或 32GB Mac，作为完全私有的编码助手
+                    </p>
+                    <p class="advantage-description">
+                        使用场景：修 bug、重构项目、跨语言迁移、快速生成业务代码、API 对接、测试用例
+                    </p>
+                    <p class="advantage-note">
+                        优势：一次投入，长期使用；数据完全本地化，保护隐私；离线也能工作
+                    </p>
+                </div>
+
+                <div class="advantage-item">
+                    <h3 class="advantage-title">小团队 / 初创公司</h3>
+                    <p class="advantage-description">
+                        推荐方案：云端 API + Vibe CLI，挑选真实任务评估节省的人力时间
+                    </p>
+                    <p class="advantage-description">
+                        使用场景：构建 AI 原生开发者工具（如智能 IDE 插件）、自建代码审查/质量平台
+                    </p>
+                    <p class="advantage-note">
+                        成本对比：在真实任务中，相比 Claude Sonnet 可获得最高 7 倍的成本效率提升
+                    </p>
+                </div>
+
+                <div class="advantage-item">
+                    <h3 class="advantage-title">中大型企业</h3>
+                    <p class="advantage-description">
+                        推荐方案：结合私有 GPU 集群 / NIM / DGX 等环境，用开源权重自建内部 AI 开发平台
+                    </p>
+                    <p class="advantage-description">
+                        使用场景：遗留系统现代化改造、核心模块重构、内部 AI 编程平台建设
+                    </p>
+                    <p class="advantage-note">
+                        注意事项：需审阅许可证条款（Devstral 2 月收入＞$20M 需特别考虑，Devstral Small 2 为 Apache 2.0）
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources -->
+    <section class="footer" id="resources">
+        <div class="container">
+            <h2 class="section-title">开发者资源</h2>
+            <div class="resources">
+                <a href="https://docs.mistral.ai/models/devstral-2-25-12" class="resource-link" target="_blank">Devstral 2 官方文档</a>
+                <a href="https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512" class="resource-link" target="_blank">HuggingFace 模型</a>
+                <a href="https://github.com/mistralai/mistral-vibe" class="resource-link" target="_blank">Vibe CLI 工具</a>
+                <a href="https://docs.unsloth.ai/models/devstral-2" class="resource-link" target="_blank">本地部署指南</a>
+                <a href="https://openrouter.ai/mistralai/devstral-2512:free" class="resource-link" target="_blank">OpenRouter 免费</a>
+            </div>
+            <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border-color);">
+                <h3 style="text-align: center; color: var(--title-color); margin-bottom: 20px;">社区与学习</h3>
+                <div class="resources">
+                    <a href="https://github.com/mistralai" class="resource-link" target="_blank">GitHub 讨论</a>
+                    <a href="https://www.reddit.com/r/LocalLLaMA" class="resource-link" target="_blank">Reddit r/LocalLLaMA</a>
+                    <a href="https://www.youtube.com/watch?v=z-xR_oIuf7Q" class="resource-link" target="_blank">实战视频教程</a>
+                </div>
+            </div>
+            <p class="copyright" style="margin-top: 40px;">
+                让 Devstral 2 成为你最得力的 AI 工程师助手——
+                把重复劳动交给 AI，把宝贵时间留给真正重要的创造与决策。
+            </p>
+        </div>
+    </section>
+</body>
+</html>
