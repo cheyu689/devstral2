@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devstral 2 vs. Devstral Small 2: How to Choose? A 30-Minute Reproducible Comparison Process (Playground Test) - Devstral 2 技术博客</title>
+    <meta name="description" content="This article addresses the question: how to choose between Devstral 2 and Devstral Small 2, avoiding reliance on intuition and instead using a reproducible method for decision-making.">
+    <link rel="canonical" href="https://devstral2.org/blog/posts/devstral-compare-choose-playground-30min/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Devstral 2 vs. Devstral Small 2: How to Choose? A 30-Minute Reproducible Comparison Process (Playground Test)">
+    <meta property="og:description" content="This article addresses the question: how to choose between Devstral 2 and Devstral Small 2, avoiding reliance on intuition and instead using a reproducible method for decision-making.">
+    <meta property="og:url" content="https://devstral2.org/blog/posts/devstral-compare-choose-playground-30min/">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://devstral2.org/assets/images/devstral-comparison-playground.jpg">
+    <meta property="article:published_time" content="2025-12-18">
+    <meta property="article:tag" content="devstral2">
+    <meta property="article:tag" content="devstral-small2">
+    <meta property="article:tag" content="comparison">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Devstral 2 vs. Devstral Small 2: How to Choose? A 30-Minute Reproducible Comparison Process (Playground Test)">
+    <meta name="twitter:description" content="This article addresses the question: how to choose between Devstral 2 and Devstral Small 2, avoiding reliance on intuition and instead using a reproducible method for decision-making.">
+    <meta name="twitter:image" content="https://devstral2.org/assets/images/devstral-comparison-playground.jpg">
+
+    <link rel="stylesheet" href="/assets/site.css">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Devstral 2 vs. Devstral Small 2: How to Choose? A 30-Minute Reproducible Comparison Process (Playground Test)",
+        "description": "This article addresses the question: how to choose between Devstral 2 and Devstral Small 2, avoiding reliance on intuition and instead using a reproducible method for decision-making.",
+        "image": "https://devstral2.org/assets/images/devstral-comparison-playground.jpg",
+        "author": {
+            "@type": "Organization",
+            "name": "Devstral 2 Team"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Devstral 2",
+            "url": "https://devstral2.org"
+        },
+        "datePublished": "2025-12-18",
+        "dateModified": "2025-12-18",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://devstral2.org/blog/posts/devstral-compare-choose-playground-30min/"
+        }
+    }
+    </script>
+
+    <style>
+        .article-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .breadcrumb {
+            padding: 20px 0;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #9CA3AF;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: #A855F7;
+        }
+
+        .article-header {
+            margin-bottom: 40px;
+        }
+
+        .article-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: #9CA3AF;
+            font-size: 14px;
+        }
+
+        .article-date {
+            font-weight: 500;
+        }
+
+        .article-tags {
+            display: flex;
+            gap: 8px;
+        }
+
+        .article-tag {
+            background: rgba(200, 203, 208, 0.1);
+            color: #E5E7EB;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            border: 1px solid rgba(200, 203, 208, 0.2);
+        }
+
+        .article-content {
+            color: #E5E7EB;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4 {
+            margin-top: 2em;
+            margin-bottom: 1em;
+            font-weight: 600;
+        }
+
+        .article-content h2 {
+            font-size: 28px;
+            color: #D8B4FE;
+        }
+
+        .article-content h3 {
+            font-size: 22px;
+            color: #D8B4FE;
+        }
+
+        .article-content p {
+            margin-bottom: 1.2em;
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin-bottom: 1.2em;
+            padding-left: 2em;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5em;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: #2a2a2a;
+            color: #D8B4FE;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(200, 203, 208, 0.05);
+        }
+
+        .feature-highlight {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-highlight h4 {
+            margin-top: 0;
+            color: #A855F7;
+        }
+
+        .decision-tree {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .decision-tree h3 {
+            color: #D8B4FE;
+            margin-top: 0;
+        }
+
+        .back-links {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #2a2a2a;
+            display: flex;
+            gap: 20px;
+        }
+
+        .back-link {
+            color: #9CA3AF;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #A855F7;
+        }
+
+        .disclaimer {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .disclaimer h4 {
+            margin-top: 0;
+            color: #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            .article-content {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="site-nav">
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blog/" class="nav-link active">Blog</a></li>
+                <li><a href="/tools/" class="nav-link">Tools</a></li>
+                <li><a href="/games/" class="nav-link">Games</a></li>
+                <li><a href="/try/" class="nav-link">Try</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <nav class="breadcrumb">
+            <a href="/">Home</a> / <a href="/blog/">Blog</a> / Devstral 2 vs. Devstral Small 2: How to Choose?
+        </nav>
+
+        <article class="article-container">
+            <header class="article-header">
+                <h1 class="article-title">Devstral 2 vs. Devstral Small 2: How to Choose? A 30-Minute Reproducible Comparison Process (Playground Test)</h1>
+                <div class="article-meta">
+                    <time datetime="2025-12-18" class="article-date">2025年12月18日</time>
+                    <div class="article-tags">
+                        <span class="article-tag">devstral2</span>
+                        <span class="article-tag">devstral-small2</span>
+                        <span class="article-tag">comparison</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="article-content">
+                <p>Both Devstral 2 and Devstral Small 2 are models geared toward "software engineering/code intelligence": the official documentation emphasizes their strength in using tools to explore codebases, edit multiple files, and drive engineering agents. <a href="https://docs.mistral.ai/models/devstral-2-25-12" target="_blank" rel="noopener noreferrer">Mistral AI documentation</a> +1</p>
+
+                <p>The official pages show that both have a 256k context; after the free period, API pricing is: Devstral 2 $0.40 / $2.00 (input/output, per million tokens), and Small 2 $0.10 / $0.30. <a href="https://docs.mistral.ai/pricing" target="_blank" rel="noopener noreferrer">Mistral AI</a> +2 <a href="https://docs.mistral.ai/models/devstral-small-2" target="_blank" rel="noopener noreferrer">Mistral AI documentation</a> +2</p>
+
+                <p>The safest way to choose is not "by feel," but by running the same multi-file project prompt twice in Playground: Devstral 2512 vs. Labs Devstral Small 2512, comparing output quality across four metrics.</p>
+
+                <h2>First, put "verifiable facts" in front of your desk. The following information is cited solely from the official/model card pages:</h2>
+
+                <p><strong>Devstral 2:</strong> Officially positioned as a "cutting-edge code agents model for software engineering tasks," emphasizing tool usage, codebase exploration, and multi-file editing capabilities; the page indicates 256k context and provides a price (charged per token after the free period). <a href="https://docs.mistral.ai/models/devstral-2-25-12" target="_blank" rel="noopener noreferrer">Mistral AI documentation</a> +1</p>
+
+                <p><strong>Devstral Small 2:</strong> Officially positioned similarly, emphasizing tool usage, codebase exploration, and multi-file editing; the page indicates 256k context and provides a lower token price. <a href="https://docs.mistral.ai/models/devstral-small-2" target="_blank" rel="noopener noreferrer">Mistral AI documentation</a> +1</p>
+
+                <p>Official news further clarifies: the API is currently free; after the free period, Devstral 2 and Small 2 will be priced at $0.40/$2.00 and $0.10/$0.30 (input/output), respectively. <a href="https://mistral.ai/news/announcing-devstral-2" target="_blank" rel="noopener noreferrer">Mistral AI</a></p>
+
+                <h2>A decision tree: Which one do I choose? Break the problem into two dimensions: task complexity × cost sensitivity.</h2>
+
+                <div class="decision-tree">
+                    <h3>Typical scenarios for Devstral 2 (Devstral 2512):</h3>
+                    <ul>
+                        <li>Your task involves modifications across multiple files (interface linkage, dependencies, or high regression risk).</li>
+                        <li>You want the model to provide not only answers but also an engineering-level plan: scope control, test completion, and PR reviewability.</li>
+                        <li>You prioritize minimizing failures and are willing to accept higher token costs (higher official pricing). <a href="https://docs.mistral.ai/models/devstral-2-25-12" target="_blank" rel="noopener noreferrer">Mistral AI documentation</a> +1</li>
+                    </ul>
+                </div>
+
+                <div class="decision-tree">
+                    <h3>Typical scenarios for Devstral Small 2 (Labs Devstral Small 2512):</h3>
+                    <ul>
+                        <li>Relatively simple requirements: a single file, low risk, or you can break the task down into smaller parts.</li>
+                        <li>Budget-sensitive, seeking lower-cost, frequent iterations (lower official pricing). <a href="https://docs.mistral.ai/models/devstral-small-2" target="_blank" rel="noopener noreferrer">Mistral AI documentation</a> +1</li>
+                        <li>You are willing to use stronger cue constraints (e.g., "scout before modifying," "output only the smallest diff," and "test points must be listed") for stability.</li>
+                    </ul>
+                </div>
+
+                <h2>30-Minute Reproducible Comparison: How to Test in Playground (My Template)</h2>
+
+                <div class="feature-highlight">
+                    <h4>Fixed parameters (to ensure fairness)</h4>
+                    <ul>
+                        <li>Temperature: [0.3]</li>
+                        <li>max_tokens: [2048]</li>
+                        <li>Response format: Text</li>
+                        <li>Same prompt (only change model)</li>
+                    </ul>
+                </div>
+
+                <div class="feature-highlight">
+                    <h4>Test Process</h4>
+                    <p>In Playground: Model: Devstral 2512 → Send the prompt → Screenshot output<br>
+                    Model: Labs Devstral Small 2512 → Send the same prompt → Screenshot output</p>
+                </div>
+
+                <p><strong>Figure A:</strong> Actual output from Mistral AI Studio Playground (Model: Devstral 2512; temperature=0.3; max_tokens=2048; top_p=1; date: 2025-12-xx). The same prompt is used to observe "Plan Quality/Scope Control/Test Awareness/Reviewability".</p>
+
+                <p><strong>Figure B:</strong> Using the same prompt and the same set of parameters, only switching the model to Labs Devstral Small 2512 (temperature=0.3; max_tokens=2048; top_p=1; date: 2025-12-xx), this was used to compare the output differences.</p>
+
+                <p>When I ran Devstral 2512 and Labs Devstral Small 2512 using the same prompt and the same set of parameters (temperature=0.3, max_tokens=2048, top_p=1), the "selection decision tree/comparison table/actual test process" outputs were highly similar.</p>
+
+                <p>Therefore, this article does not interpret this result as a "performance gap" but rather as a general selection template. I will retest it later with a more discriminative multi-file modification task.</p>
+
+                <h2>Conclusion: How to choose the right model at a glance?</h2>
+
+                <div class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Recommended Model</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Complex projects / Multi-file linkage / High-risk modifications</strong></td>
+                            <td>Prioritize Devstral 2 (Devstral 2512) <a href="https://docs.mistral.ai/models/devstral-2-25-12" target="_blank" rel="noopener noreferrer">Mistral AI Documentation</a> +1</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Budget-sensitive / Rapid iteration / Task decomposable</strong></td>
+                            <td>Prioritize Devstral Small 2 (Labs Devstral Small 2512)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Full prompt used for testing:</h2>
+                <div class="feature-highlight">
+                    <p><strong>You are an "Engineering Lead + Architect".<br>
+I want to choose between Devstral 2 and Devstral Small 2.<br>
+Please provide a "practical" selection recommendation without fabricating any benchmarks.</strong></p>
+
+                    <p><strong>【My Background】</strong><br>
+- I am a beginner, but I can use the console/Playground for testing; I can use Postman (optional).<br>
+- I want: a comparison table + a selection conclusion + a risk warning + reproduction steps.</p>
+
+                    <p><strong>【Task】</strong><br>
+1) Explain in 8-12 lines why "code agent/multi-file project tasks" have higher requirements for the model (in layman's terms).</p>
+
+                    <p>2) Provide a "selection decision tree": Under what circumstances should I choose Devstral 2? Under what circumstances should I choose Devstral Small 2?</p>
+
+                    <p>3) Output a comparison table (fields should include at least: suitable task type, inference/quality tendency, cost sensitivity, suitability for local use, dependence on context length, and risks/precautions).</p>
+
+                    <p>4) Provide a "30-minute field test plan" (using only the console Playground): how to run the same prompt twice and what metrics to use for comparison (e.g., plan quality, control over the scope of changes, testing awareness, and auditability).</p>
+
+                    <p>5) Finally, output a "disclaimer/statement of truthfulness" that can be directly included in a blog, distinguishing among three categories: [facts], [test results], and [opinions].</p>
+
+                    <p><strong>[Strong Constraints]</strong><br>
+- Do not fabricate any numerical benchmarks or conclusions based on "I've seen a certain review."<br>
+- If you cite facts such as "model positioning/context length/pricing," please prompt me to verify them on the official page and provide a list of "which fields I should verify" (do not write hard-coded numbers).<br>
+- The output should be suitable for direct screenshot use as test material: clear structure, bullet points, and tables.</p>
+                </div>
+
+                <div class="disclaimer">
+                    <h4>Disclaimer / Statement of Truthfulness</h4>
+                    <p><strong>[Facts]</strong>: Official documentation confirms both models have 256k context window and are positioned for code engineering tasks. Pricing information comes from official Mistral AI pricing page.</p>
+                    <p><strong>[Test Results]</strong>: Running identical prompts with both models using fixed parameters (temp=0.3, max_tokens=2048) produced highly similar outputs in my initial test. This similarity is expected given the models' similar architecture and training objectives.</p>
+                    <p><strong>[Opinions]</strong>: The selection framework (task complexity × cost sensitivity) is my personal recommendation based on practical engineering considerations. Actual performance may vary based on specific use cases and prompting strategies.</p>
+                </div>
+            </div>
+
+            <div class="back-links">
+                <a href="/blog/" class="back-link">← 回到博客列表</a>
+                <a href="/" class="back-link">← 回到首页</a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Devstral 2. 专注于 AI 编程与软件工程。</p>
+        </div>
+    </footer>
+</body>
+</html>
