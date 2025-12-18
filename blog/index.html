@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客 - Devstral 2 技术分享</title>
+    <meta name="description" content="Devstral 2 博客 - 分享 AI 编程、软件工程、代码开发最佳实践等内容">
+    <link rel="canonical" href="https://devstral2.org/blog/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="博客 - Devstral 2 技术分享">
+    <meta property="og:description" content="Devstral 2 博客 - 分享 AI 编程、软件工程、代码开发最佳实践等内容">
+    <meta property="og:url" content="https://devstral2.org/blog/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://devstral2.org/assets/images/devstral-2-blog-cover.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="博客 - Devstral 2 技术分享">
+    <meta name="twitter:description" content="Devstral 2 博客 - 分享 AI 编程、软件工程、代码开发最佳实践等内容">
+    <meta name="twitter:image" content="https://devstral2.org/assets/images/devstral-2-blog-cover.jpg">
+
+    <link rel="stylesheet" href="/assets/site.css">
+    <style>
+        .blog-hero {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #E5E7EB 0%, #A855F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .blog-description {
+            font-size: 18px;
+            color: #9CA3AF;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-posts {
+            padding: 60px 0;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .post-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            border-color: #A855F7;
+            transform: translateY(-5px);
+        }
+
+        .post-date {
+            color: #9CA3AF;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .post-title a {
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .post-title a:hover {
+            color: #A855F7;
+        }
+
+        .post-excerpt {
+            color: #9CA3AF;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .post-tag {
+            background: rgba(200, 203, 208, 0.1);
+            color: #E5E7EB;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            border: 1px solid rgba(200, 203, 208, 0.2);
+        }
+
+        .maintenance-note {
+            background: #2a2a2a;
+            border-left: 4px solid #A855F7;
+            padding: 20px;
+            margin: 40px 0;
+            border-radius: 8px;
+        }
+
+        .maintenance-note h3 {
+            color: #D8B4FE;
+            margin-bottom: 10px;
+        }
+
+        .maintenance-note ul {
+            color: #9CA3AF;
+            padding-left: 20px;
+        }
+
+        .maintenance-note li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="nav-logo">Devstral 2</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/blog/" class="nav-link active">Blog</a>
+                <a href="/tools/" class="nav-link">Tools</a>
+                <a href="/games/" class="nav-link">Games</a>
+                <a href="/try/" class="nav-link">Try</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="blog-hero">
+            <div class="container">
+                <h1 class="blog-title">Devstral 2 技术博客</h1>
+                <p class="blog-description">
+                    分享 AI 编程、软件工程、代码开发最佳实践，以及 Devstral 2 的使用技巧和案例分析
+                </p>
+            </div>
+        </section>
+
+        <section class="blog-posts">
+            <div class="container">
+                <!-- 维护规则说明 -->
+                <div class="maintenance-note">
+                    <h3>博客维护规则</h3>
+                    <ul>
+                        <li><strong>新文章发布</strong>：新建 /blog/posts/&lt;slug&gt;/index.html + 在归档页顶部插入文章卡片</li>
+                        <li><strong>URL 永久性</strong>：slug 一旦发布尽量保持稳定，如需修改需保留旧页面并重定向</li>
+                        <li><strong>内容更新</strong>：允许随时修改标题/摘要/标签（不影响 URL）</li>
+                        <li><strong>分享建议</strong>：对外分享时优先链接到具体文章详情页，而非此目录页</li>
+                    </ul>
+                </div>
+
+                <div class="post-grid">
+                    <!-- 文章卡片按日期倒序排列（最新的在最上面） -->
+
+                    <!-- 文章2：最新文章 -->
+                    <article class="post-card">
+                        <time datetime="2025-01-17" class="post-date">2025年1月17日</time>
+                        <h2 class="post-title">
+                            <a href="/blog/posts/devstral-2-vision-features/">Devstral 2 Vision：看图写代码的实用指南</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            深入了解 Devstral Small 2 的视觉理解能力，如何通过界面截图生成前端代码、架构图转部署配置，以及错误截图智能诊断等实用功能。
+                        </p>
+                        <div class="post-tags">
+                            <span class="post-tag">Vision</span>
+                            <span class="post-tag">前端开发</span>
+                            <span class="post-tag">实战案例</span>
+                        </div>
+                    </article>
+
+                    <!-- 文章1：较早文章 -->
+                    <article class="post-card">
+                        <time datetime="2025-01-15" class="post-date">2025年1月15日</time>
+                        <h2 class="post-title">
+                            <a href="/blog/posts/devstral-2-vs-copilot-claude/">Devstral 2 vs Copilot vs Claude：代码 AI 三强对比</a>
+                        </h2>
+                        <p class="post-excerpt">
+                            从代码理解深度、工具调用能力、多文件协作等维度，详细对比 Devstral 2、GitHub Copilot 和 Claude 的优劣势，帮助你选择最适合的 AI 编程助手。
+                        </p>
+                        <div class="post-tags">
+                            <span class="post-tag">对比评测</span>
+                            <span class="post-tag">工具选择</span>
+                            <span class="post-tag">AI 编程</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2025 Devstral 2. 专注于 AI 编程与软件工程。</p>
+        </div>
+    </footer>
+</body>
+</html>
