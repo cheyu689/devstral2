@@ -407,9 +407,82 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Site Header */
+        .site-header {
+            background-color: var(--secondary-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background-color: rgba(10, 10, 10, 0.95);
+        }
+
+        .site-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            height: 60px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--brand-color);
+            background-color: rgba(168, 85, 247, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--brand-color);
+            background-color: rgba(168, 85, 247, 0.15);
+        }
+
+        /* Responsive for mobile */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-link {
+                font-size: 14px;
+                padding: 6px 12px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <ul class="nav-links">
+                <li><a href="./" class="nav-link active">Home</a></li>
+                <li><a href="./blog/" class="nav-link">Blog</a></li>
+                <li><a href="./tools/" class="nav-link">Tools</a></li>
+                <li><a href="./games/" class="nav-link">Games</a></li>
+                <li><a href="./try/" class="nav-link">Try</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
