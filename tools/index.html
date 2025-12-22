@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="description" content="Devstral 2 免费工具集合 - 提供各种实用的开发者工具，帮助你更好地使用 Devstral 2 进行编程开发。">
+    <title>Tools - Devstral 2 免费工具集合</title>
+    <link rel="stylesheet" href="/site.css">
+    <style>
+        .tools-hero {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
+            text-align: center;
+        }
+
+        .tools-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #E5E7EB 0%, #A855F7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tools-subtitle {
+            font-size: 18px;
+            color: #9CA3AF !important;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            padding: 60px 0;
+        }
+
+        .tool-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .tool-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: #A855F7;
+            transform: translateY(-5px);
+        }
+
+        .tool-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .tool-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #E5E7EB !important;
+        }
+
+        .tool-description {
+            color: #9CA3AF !important;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .tool-button {
+            display: inline-block;
+            background-color: #A855F7;
+            color: #000000;
+            padding: 10px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .back-link {
+            color: #9CA3AF !important;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #A855F7 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blog/" class="nav-link">Blog</a></li>
+                <li><a href="/tools/" class="nav-link active">Tools</a></li>
+                <li><a href="/games/" class="nav-link">Games</a></li>
+                <li><a href="/try/" class="nav-link">Try</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Tools Hero Section -->
+    <section class="tools-hero">
+        <div class="container">
+            <h1 class="tools-title">Devstral 2 免费工具集</h1>
+            <p class="tools-subtitle">
+                为开发者打造的实用工具集合，帮助你更好地使用 Devstral 2 进行编程开发
+            </p>
+        </div>
+    </section>
+
+    <!-- Tools Grid -->
+    <section class="tools-grid">
+        <div class="container">
+            <div class="tool-cards">
+                <!-- Prompt Pack Generator -->
+                <div class="tool-card">
+                    <div class="tool-icon">🛠️</div>
+                    <h3 class="tool-title">Devstral 2 Prompt Pack 生成器</h3>
+                    <p class="tool-description">
+                        生成适配 Devstral 2 的多文件工程/Agentic Coding 提示词工作流。支持生成可分享的结果链接，方便转发和复用。
+                    </p>
+                    <a href="/tools/devstral2-prompt-pack.html" class="tool-button">立即使用</a>
+                </div>
+
+                <!-- 更多工具将来可以添加在这里 -->
+                <div class="tool-card" style="opacity: 0.6;">
+                    <div class="tool-icon">🚧</div>
+                    <h3 class="tool-title">敬请期待更多工具</h3>
+                    <p class="tool-description">
+                        我们正在开发更多实用的开发者工具，帮助你更高效地使用 Devstral 2。
+                    </p>
+                    <a href="#" class="tool-button" disabled>即将推出</a>
+                </div>
+            </div>
+
+            <!-- Back Home -->
+            <div class="back-home">
+                <a href="/" class="back-link">← 返回主页</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

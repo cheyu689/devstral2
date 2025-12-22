@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="description" content="Devstral 2 Prompt Pack 生成器 - 免费工具，生成适配 Devstral 2 的多文件工程/Agentic Coding 提示词工作流">
+    <title>Devstral 2 Prompt Pack 生成器 (Free) - Tools</title>
+    <link rel="stylesheet" href="/site.css">
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <style>
+        .tool-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tool-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #D8B4FE !important;
+            margin-bottom: 15px;
+        }
+
+        .tool-subtitle {
+            font-size: 18px;
+            color: #9CA3AF !important;
+        }
+
+        .form-section {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            color: #E5E7EB !important;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-select,
+        .form-input {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            color: #E5E7EB !important;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-color: #A855F7;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #A855F7;
+            color: #000000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-secondary {
+            background: #3a3a3a;
+            color: #E5E7EB !important;
+        }
+
+        .btn-secondary:hover {
+            background: #4a4a4a;
+        }
+
+        .output-section {
+            display: none;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .output-block {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .output-title {
+            color: #D8B4FE !important;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .output-content {
+            color: #E5E7EB !important;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #3a3a3a;
+            color: #E5E7EB !important;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: #4a4a4a;
+        }
+
+        .copy-button.copied {
+            background: #4CAF50;
+            color: #000000 !important;
+        }
+
+        .share-section {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .share-title {
+            color: #D8B4FE !important;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .share-button {
+            background: #3a3a3a;
+            color: #E5E7EB !important;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .share-button:hover {
+            background: #4a4a4a;
+        }
+
+        .back-links {
+            margin-top: 40px;
+            text-align: center;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .back-link {
+            color: #9CA3AF !important;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #A855F7 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Site Header -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/blog/" class="nav-link">Blog</a></li>
+                <li><a href="/tools/" class="nav-link active">Tools</a></li>
+                <li><a href="/games/" class="nav-link">Games</a></li>
+                <li><a href="/try/" class="nav-link">Try</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Tool Content -->
+    <div class="tool-container">
+        <div class="tool-header">
+            <h1 class="tool-title">Devstral 2 Prompt Pack Generator (Free)</h1>
+            <p class="tool-subtitle">生成适配 Devstral 2 的多文件工程/Agentic Coding 提示词工作流</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">任务类型</label>
+                    <select id="taskType" class="form-select">
+                        <option value="bug-fixing">Bug fixing</option>
+                        <option value="cross-file-refactor">Cross-file refactor</option>
+                        <option value="add-tests">Add tests</option>
+                        <option value="repo-exploration">Repo exploration</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">编程语言</label>
+                    <select id="language" class="form-select">
+                        <option value="Python">Python</option>
+                        <option value="JavaScript/TypeScript">JS/TS</option>
+                        <option value="Go">Go</option>
+                        <option value="Java">Java</option>
+                        <option value="Rust">Rust</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">框架（可选）</label>
+                    <input type="text" id="framework" class="form-input" placeholder="如 React, Django, Spring 等">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">仓库规模</label>
+                    <select id="repoSize" class="form-select">
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">是否有测试</label>
+                    <select id="hasTests" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">是否允许使用工具</label>
+                    <select id="allowTools" class="form-select">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="generatePromptPack()">生成 Prompt Pack</button>
+                <button class="btn btn-secondary" onclick="resetForm()">重置</button>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <div id="outputSection" class="output-section">
+            <!-- System Prompt -->
+            <div class="output-block">
+                <h3 class="output-title">System Prompt</h3>
+                <div id="systemPrompt" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('systemPrompt')">复制</button>
+            </div>
+
+            <!-- Plan/Workflow -->
+            <div class="output-block">
+                <h3 class="output-title">Plan / Workflow</h3>
+                <div id="planWorkflow" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('planWorkflow')">复制</button>
+            </div>
+
+            <!-- Patch Strategy -->
+            <div class="output-block">
+                <h3 class="output-title">Patch Strategy</h3>
+                <div id="patchStrategy" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('patchStrategy')">复制</button>
+            </div>
+
+            <!-- Retry & Debug Playbook -->
+            <div class="output-block">
+                <h3 class="output-title">Retry & Debug Playbook</h3>
+                <div id="retryPlaybook" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('retryPlaybook')">复制</button>
+            </div>
+
+            <!-- Share Section -->
+            <div class="share-section">
+                <h3 class="share-title">分享您的 Prompt Pack</h3>
+                <div class="share-buttons">
+                    <button class="share-button" onclick="copyShareUrl()">复制 Share URL</button>
+                    <button class="share-button" onclick="copyMarkdownReference()">复制 Markdown 引用</button>
+                    <button class="share-button" onclick="copyIframeEmbed()">复制 iframe 嵌入代码</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back Links -->
+        <div class="back-links">
+            <a href="/" class="back-link">← 返回主页</a>
+            <a href="/tools/" class="back-link">查看所有工具</a>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时检查URL参数
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const compressed = urlParams.get('r');
+
+            if (compressed) {
+                try {
+                    const decompressed = LZString.decompressFromEncodedURIComponent(compressed);
+                    const params = JSON.parse(decompressed);
+
+                    // 填充表单
+                    document.getElementById('taskType').value = params.taskType || 'bug-fixing';
+                    document.getElementById('language').value = params.language || 'Python';
+                    document.getElementById('framework').value = params.framework || '';
+                    document.getElementById('repoSize').value = params.repoSize || 'Medium';
+                    document.getElementById('hasTests').value = params.hasTests || 'Yes';
+                    document.getElementById('allowTools').value = params.allowTools || 'Yes';
+
+                    // 自动生成
+                    generatePromptPack();
+                } catch (e) {
+                    console.error('Failed to decompress parameters:', e);
+                }
+            }
+        });
+
+        function generatePromptPack() {
+            const params = {
+                taskType: document.getElementById('taskType').value,
+                language: document.getElementById('language').value,
+                framework: document.getElementById('framework').value,
+                repoSize: document.getElementById('repoSize').value,
+                hasTests: document.getElementById('hasTests').value,
+                allowTools: document.getElementById('allowTools').value
+            };
+
+            // 生成内容
+            const systemPrompt = generateSystemPrompt(params);
+            const planWorkflow = generatePlanWorkflow(params);
+            const patchStrategy = generatePatchStrategy(params);
+            const retryPlaybook = generateRetryPlaybook(params);
+
+            // 显示内容
+            document.getElementById('systemPrompt').textContent = systemPrompt;
+            document.getElementById('planWorkflow').textContent = planWorkflow;
+            document.getElementById('patchStrategy').textContent = patchStrategy;
+            document.getElementById('retryPlaybook').textContent = retryPlaybook;
+
+            // 显示输出区域
+            document.getElementById('outputSection').style.display = 'block';
+
+            // 更新URL
+            const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(params));
+            const newUrl = window.location.pathname + '?r=' + compressed;
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        function generateSystemPrompt(params) {
+            return `你是一个专业的 Devstral 2 AI 工程师助手，专门处理 ${params.language} 项目的${getTaskTypeText(params.taskType)}任务。
+
+核心原则：
+1. 先侦察后修改：充分理解代码库结构和依赖关系
+2. 跨文件最小改动：只修改必要的文件，避免过度重构
+3. 先测试后提交：确保修改不会破坏现有功能
+${params.allowTools === 'Yes' ? '4. 必要时使用工具/搜索来理解代码和验证修改' : ''}
+
+当前项目信息：
+- 编程语言：${params.language}
+- 框架：${params.framework || '无'}
+- 仓库规模：${params.repoSize}
+- 测试覆盖：${params.hasTests === 'Yes' ? '有现有测试' : '无测试'}
+- 工具使用：${params.allowTools === 'Yes' ? '允许使用工具' : '仅限代码分析'}
+
+请基于以上信息，协助完成工程任务。`;
+        }
+
+        function generatePlanWorkflow(params) {
+            const taskType = params.taskType;
+            let workflow = [];
+
+            switch(taskType) {
+                case 'bug-fixing':
+                    workflow = [
+                        '1. 分析错误信息和复现步骤',
+                        '2. 定位问题相关的代码文件和函数',
+                        '3. 理解错误根因（使用调试工具或添加日志）',
+                        '4. 设计最小化修复方案',
+                        '5. 实施代码修改',
+                        '6. 运行测试验证修复效果',
+                        '7. 检查是否引入副作用'
+                    ];
+                    break;
+                case 'cross-file-refactor':
+                    workflow = [
+                        '1. 识别需要重构的代码模块和依赖关系',
+                        '2. 制定重构计划和影响范围评估',
+                        '3. 更新接口定义和类型声明',
+                        '4. 逐步迁移实现代码',
+                        '5. 更新调用点',
+                        '6. 运行完整测试套件',
+                        '7. 验证功能一致性和性能'
+                    ];
+                    break;
+                case 'add-tests':
+                    workflow = [
+                        '1. 分析现有代码结构和功能',
+                        '2. 识别需要测试的核心功能和边界条件',
+                        '3. 设计测试用例（正常、异常、边界）',
+                        '4. 编写单元测试',
+                        '5. 编写集成测试（如需要）',
+                        '6. 运行测试确保通过',
+                        '7. 检查测试覆盖率'
+                    ];
+                    break;
+                case 'repo-exploration':
+                    workflow = [
+                        '1. 分析项目结构和目录组织',
+                        '2. 识别主要模块和组件',
+                        '3. 理解数据流和控制流',
+                        '4. 识别关键配置和依赖',
+                        '5. 分析API接口和设计模式',
+                        '6. 生成项目文档或架构图',
+                        '7. 总结发现和建议'
+                    ];
+                    break;
+            }
+
+            return workflow.join('\n');
+        }
+
+        function generatePatchStrategy(params) {
+            let strategy = '';
+
+            if (params.repoSize === 'Large') {
+                strategy += '大型仓库策略：\n';
+                strategy += '- 分批处理，避免一次性修改过多文件\n';
+                strategy += '- 使用分支特性开关降低风险\n';
+                strategy += '- 增量部署，逐步验证\n\n';
+            }
+
+            strategy += '修改原则：\n';
+            strategy += '- 保持向后兼容性（如可能）\n';
+            strategy += '- 遵循项目现有的代码风格\n';
+            strategy += '- 最小化公共API的变动\n';
+            strategy += '- 确保错误处理的一致性\n\n';
+
+            if (params.hasTests === 'Yes') {
+                strategy += '测试策略：\n';
+                strategy += '- 运行现有测试确保无回归\n';
+                strategy += '- 为新功能添加测试\n';
+                strategy += '- 更新相关的集成测试\n\n';
+            }
+
+            strategy += '验证要点：\n';
+            strategy += '- 检查类型定义和接口一致性\n';
+            strategy += '- 验证配置文件和环境变量\n';
+            strategy += '- 确认日志和监控点正常工作\n';
+            strategy += '- 性能影响评估（如适用）';
+
+            return strategy;
+        }
+
+        function generateRetryPlaybook(params) {
+            let playbook = '失败诊断和处理流程：\n\n';
+
+            playbook += '1. 问题定位：\n';
+            playbook += '   - 检查错误日志和堆栈跟踪\n';
+            playbook += '   - 分析最近的代码变更\n';
+            playbook += '   - 使用调试工具深入分析\n\n';
+
+            playbook += '2. 回滚策略：\n';
+            playbook += '   - 立即回滚到上一个稳定版本\n';
+            playbook += '   - 隔离问题环境\n';
+            playbook += '   - 保留问题现场用于分析\n\n';
+
+            playbook += '3. 缩小范围：\n';
+            playbook += '   - 二分定位问题提交\n';
+            playbook += '   - 最小化复现步骤\n';
+            playbook += '   - 创建独立的测试用例\n\n';
+
+            playbook += '4. 修复验证：\n';
+            playbook += '   - 在测试环境验证修复\n';
+            playbook += '   - 运行完整的测试套件\n';
+            playbook += '   - 进行压力测试（如需要）\n\n';
+
+            if (params.allowTools === 'Yes') {
+                playbook += '5. 工具辅助：\n';
+                playbook += '   - 使用静态分析工具检查代码质量\n';
+                playbook += '   - 利用性能分析工具定位瓶颈\n';
+                playbook += '   - 使用监控工具跟踪运行状态\n';
+            }
+
+            return playbook;
+        }
+
+        function getTaskTypeText(taskType) {
+            const texts = {
+                'bug-fixing': 'Bug修复',
+                'cross-file-refactor': '跨文件重构',
+                'add-tests': '添加测试',
+                'repo-exploration': '代码库探索'
+            };
+            return texts[taskType] || taskType;
+        }
+
+        function resetForm() {
+            document.getElementById('taskType').value = 'bug-fixing';
+            document.getElementById('language').value = 'Python';
+            document.getElementById('framework').value = '';
+            document.getElementById('repoSize').value = 'Medium';
+            document.getElementById('hasTests').value = 'Yes';
+            document.getElementById('allowTools').value = 'Yes';
+            document.getElementById('outputSection').style.display = 'none';
+
+            // 清除URL参数
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const button = element.nextElementSibling;
+                const originalText = button.textContent;
+                button.textContent = '已复制';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function copyShareUrl() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Share URL 已复制到剪贴板');
+            });
+        }
+
+        function copyMarkdownReference() {
+            const origin = window.location.origin;
+            const url = window.location.href;
+            const markdown = `Devstral 2 Prompt Pack（生成结果）：${url}
+
+Devstral 2 主页与模型介绍：${origin}/`;
+
+            navigator.clipboard.writeText(markdown).then(() => {
+                alert('Markdown 引用已复制到剪贴板');
+            });
+        }
+
+        function copyIframeEmbed() {
+            const origin = window.location.origin;
+            const urlParams = new URLSearchParams(window.location.search);
+            const compressed = urlParams.get('r');
+            const iframeCode = `<iframe src="${origin}/tools/embed-devstral2-prompt-pack.html${compressed ? '?r=' + compressed : ''}" width="100%" height="520" loading="lazy"></iframe>`;
+
+            navigator.clipboard.writeText(iframeCode).then(() => {
+                alert('iframe 嵌入代码已复制到剪贴板');
+            });
+        }
+    </script>
+</body>
+</html>

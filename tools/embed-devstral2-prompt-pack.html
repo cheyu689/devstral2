@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="description" content="Devstral 2 Prompt Pack 嵌入视图">
+    <title>Devstral 2 Prompt Pack - Embedded View</title>
+    <link rel="stylesheet" href="/site.css">
+    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000000 !important;
+        }
+
+        .embed-container {
+            max-width: 100%;
+            height: 100%;
+        }
+
+        .output-block {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .output-title {
+            color: #D8B4FE !important;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .output-content {
+            color: #E5E7EB !important;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #3a3a3a;
+            color: #E5E7EB !important;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button:hover {
+            background: #4a4a4a;
+        }
+
+        .copy-button.copied {
+            background: #4CAF50;
+            color: #000000 !important;
+        }
+
+        .loading {
+            text-align: center;
+            color: #9CA3AF !important;
+            padding: 40px;
+        }
+
+        .error {
+            background: #2a1a1a;
+            border: 1px solid #8B0000;
+            color: #FF6B6B !important;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .footer-link {
+            color: #9CA3AF !important;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #A855F7 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="embed-container">
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            正在加载 Prompt Pack...
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error" style="display: none;">
+            无法加载 Prompt Pack。请确保链接正确。
+        </div>
+
+        <!-- Content Container -->
+        <div id="content" style="display: none;">
+            <!-- System Prompt -->
+            <div class="output-block">
+                <h3 class="output-title">System Prompt</h3>
+                <div id="systemPrompt" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('systemPrompt')">复制</button>
+            </div>
+
+            <!-- Plan/Workflow -->
+            <div class="output-block">
+                <h3 class="output-title">Plan / Workflow</h3>
+                <div id="planWorkflow" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('planWorkflow')">复制</button>
+            </div>
+
+            <!-- Patch Strategy -->
+            <div class="output-block">
+                <h3 class="output-title">Patch Strategy</h3>
+                <div id="patchStrategy" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('patchStrategy')">复制</button>
+            </div>
+
+            <!-- Retry & Debug Playbook -->
+            <div class="output-block">
+                <h3 class="output-title">Retry & Debug Playbook</h3>
+                <div id="retryPlaybook" class="output-content"></div>
+                <button class="copy-button" onclick="copyToClipboard('retryPlaybook')">复制</button>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <a href="/tools/devstral2-prompt-pack.html" target="_blank" class="footer-link">
+                    在新窗口中打开 Devstral 2 Prompt Pack Generator →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 复用主页面的生成函数
+        function generateSystemPrompt(params) {
+            return `你是一个专业的 Devstral 2 AI 工程师助手，专门处理 ${params.language} 项目的${getTaskTypeText(params.taskType)}任务。
+
+核心原则：
+1. 先侦察后修改：充分理解代码库结构和依赖关系
+2. 跨文件最小改动：只修改必要的文件，避免过度重构
+3. 先测试后提交：确保修改不会破坏现有功能
+${params.allowTools === 'Yes' ? '4. 必要时使用工具/搜索来理解代码和验证修改' : ''}
+
+当前项目信息：
+- 编程语言：${params.language}
+- 框架：${params.framework || '无'}
+- 仓库规模：${params.repoSize}
+- 测试覆盖：${params.hasTests === 'Yes' ? '有现有测试' : '无测试'}
+- 工具使用：${params.allowTools === 'Yes' ? '允许使用工具' : '仅限代码分析'}
+
+请基于以上信息，协助完成工程任务。`;
+        }
+
+        function generatePlanWorkflow(params) {
+            const taskType = params.taskType;
+            let workflow = [];
+
+            switch(taskType) {
+                case 'bug-fixing':
+                    workflow = [
+                        '1. 分析错误信息和复现步骤',
+                        '2. 定位问题相关的代码文件和函数',
+                        '3. 理解错误根因（使用调试工具或添加日志）',
+                        '4. 设计最小化修复方案',
+                        '5. 实施代码修改',
+                        '6. 运行测试验证修复效果',
+                        '7. 检查是否引入副作用'
+                    ];
+                    break;
+                case 'cross-file-refactor':
+                    workflow = [
+                        '1. 识别需要重构的代码模块和依赖关系',
+                        '2. 制定重构计划和影响范围评估',
+                        '3. 更新接口定义和类型声明',
+                        '4. 逐步迁移实现代码',
+                        '5. 更新调用点',
+                        '6. 运行完整测试套件',
+                        '7. 验证功能一致性和性能'
+                    ];
+                    break;
+                case 'add-tests':
+                    workflow = [
+                        '1. 分析现有代码结构和功能',
+                        '2. 识别需要测试的核心功能和边界条件',
+                        '3. 设计测试用例（正常、异常、边界）',
+                        '4. 编写单元测试',
+                        '5. 编写集成测试（如需要）',
+                        '6. 运行测试确保通过',
+                        '7. 检查测试覆盖率'
+                    ];
+                    break;
+                case 'repo-exploration':
+                    workflow = [
+                        '1. 分析项目结构和目录组织',
+                        '2. 识别主要模块和组件',
+                        '3. 理解数据流和控制流',
+                        '4. 识别关键配置和依赖',
+                        '5. 分析API接口和设计模式',
+                        '6. 生成项目文档或架构图',
+                        '7. 总结发现和建议'
+                    ];
+                    break;
+            }
+
+            return workflow.join('\n');
+        }
+
+        function generatePatchStrategy(params) {
+            let strategy = '';
+
+            if (params.repoSize === 'Large') {
+                strategy += '大型仓库策略：\n';
+                strategy += '- 分批处理，避免一次性修改过多文件\n';
+                strategy += '- 使用分支特性开关降低风险\n';
+                strategy += '- 增量部署，逐步验证\n\n';
+            }
+
+            strategy += '修改原则：\n';
+            strategy += '- 保持向后兼容性（如可能）\n';
+            strategy += '- 遵循项目现有的代码风格\n';
+            strategy += '- 最小化公共API的变动\n';
+            strategy += '- 确保错误处理的一致性\n\n';
+
+            if (params.hasTests === 'Yes') {
+                strategy += '测试策略：\n';
+                strategy += '- 运行现有测试确保无回归\n';
+                strategy += '- 为新功能添加测试\n';
+                strategy += '- 更新相关的集成测试\n\n';
+            }
+
+            strategy += '验证要点：\n';
+            strategy += '- 检查类型定义和接口一致性\n';
+            strategy += '- 验证配置文件和环境变量\n';
+            strategy += '- 确认日志和监控点正常工作\n';
+            strategy += '- 性能影响评估（如适用）';
+
+            return strategy;
+        }
+
+        function generateRetryPlaybook(params) {
+            let playbook = '失败诊断和处理流程：\n\n';
+
+            playbook += '1. 问题定位：\n';
+            playbook += '   - 检查错误日志和堆栈跟踪\n';
+            playbook += '   - 分析最近的代码变更\n';
+            playbook += '   - 使用调试工具深入分析\n\n';
+
+            playbook += '2. 回滚策略：\n';
+            playbook += '   - 立即回滚到上一个稳定版本\n';
+            playbook += '   - 隔离问题环境\n';
+            playbook += '   - 保留问题现场用于分析\n\n';
+
+            playbook += '3. 缩小范围：\n';
+            playbook += '   - 二分定位问题提交\n';
+            playbook += '   - 最小化复现步骤\n';
+            playbook += '   - 创建独立的测试用例\n\n';
+
+            playbook += '4. 修复验证：\n';
+            playbook += '   - 在测试环境验证修复\n';
+            playbook += '   - 运行完整的测试套件\n';
+            playbook += '   - 进行压力测试（如需要）\n\n';
+
+            if (params.allowTools === 'Yes') {
+                playbook += '5. 工具辅助：\n';
+                playbook += '   - 使用静态分析工具检查代码质量\n';
+                playbook += '   - 利用性能分析工具定位瓶颈\n';
+                playbook += '   - 使用监控工具跟踪运行状态\n';
+            }
+
+            return playbook;
+        }
+
+        function getTaskTypeText(taskType) {
+            const texts = {
+                'bug-fixing': 'Bug修复',
+                'cross-file-refactor': '跨文件重构',
+                'add-tests': '添加测试',
+                'repo-exploration': '代码库探索'
+            };
+            return texts[taskType] || taskType;
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const button = element.nextElementSibling;
+                const originalText = button.textContent;
+                button.textContent = '已复制';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // 页面加载时处理
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const compressed = urlParams.get('r');
+
+            if (compressed) {
+                try {
+                    const decompressed = LZString.decompressFromEncodedURIComponent(compressed);
+                    const params = JSON.parse(decompressed);
+
+                    // 生成内容
+                    const systemPrompt = generateSystemPrompt(params);
+                    const planWorkflow = generatePlanWorkflow(params);
+                    const patchStrategy = generatePatchStrategy(params);
+                    const retryPlaybook = generateRetryPlaybook(params);
+
+                    // 填充内容
+                    document.getElementById('systemPrompt').textContent = systemPrompt;
+                    document.getElementById('planWorkflow').textContent = planWorkflow;
+                    document.getElementById('patchStrategy').textContent = patchStrategy;
+                    document.getElementById('retryPlaybook').textContent = retryPlaybook;
+
+                    // 显示内容，隐藏加载
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('content').style.display = 'block';
+
+                } catch (e) {
+                    console.error('Failed to load prompt pack:', e);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                }
+            } else {
+                // 显示默认内容或错误
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = '未找到 Prompt Pack 参数。请从主页面生成后分享。';
+            }
+        });
+    </script>
+</body>
+</html>
